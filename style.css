@@ -22,3 +22,13 @@ body {
     color: var(--text);
     line-height: 1.5;
 }
+
+/* App container */
+.app {
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 24px;
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
