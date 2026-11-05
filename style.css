@@ -63,3 +63,101 @@ body {
     border-radius: var(--radius);
     font-weight: 600;
 }
+
+/* ---------- Form ---------- */
+.task-form-section {
+    margin-bottom: 24px;
+}
+
+#task-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.form-row {
+    display: flex;
+    gap: 12px;
+}
+
+.form-row select,
+.form-row input {
+    flex: 1;
+}
+
+/* ---------- Shared input styles ---------- */
+input,
+textarea,
+select,
+button {
+    font: inherit;
+}
+
+input[type="text"],
+input[type="date"],
+input[type="search"],
+textarea,
+select {
+    padding: 10px 12px;
+    background: var(--card);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+}
+
+textarea {
+    resize: vertical;
+}
+
+/* ---------- Button ---------- */
+#submit-btn {
+    padding: 10px;
+    background: var(--primary);
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+#submit-btn:hover {
+    background: #4338ca;
+}
+
+/* ---------- Search and filters ---------- */
+.controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.controls input {
+    flex: 2;
+    min-width: 160px;
+}
+
+.controls select {
+    flex: 1;
+    min-width: 120px;
+}
+
+/* ---------- Task list basics ---------- */
+#task-list {
+    list-style: none;
+}
+
+#empty-message {
+    text-align: center;
+    color: var(--text-muted);
+    padding: 24px 0;
+}
