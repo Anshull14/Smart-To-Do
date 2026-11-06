@@ -11,6 +11,10 @@ const totalCount = document.getElementById("total-count");
 const completedCount = document.getElementById("completed-count");
 const pendingCount = document.getElementById("pending-count");
 
+const searchInput = document.getElementById("search-input");
+const statusFilter = document.getElementById("status-filter");
+const priorityFilter = document.getElementById("priority-filter");
+
 // 2. The data
 let tasks = [];
 let editingId = null; // null = adding a new task, otherwise the id being edited
@@ -87,11 +91,33 @@ function startEdit(id) {
   renderTasks();
 }
 
+function getFilteredTasks() {
+  const searchText = searchInput.value.trim().toLowerCase();
+  const status = statusFilter.value;
+  const priority = priorityFilter.value;
+
+  return tasks.filter(function (task) {
+    const matchesSearch =
+      task.title.toLowerCase().includes(searchText) ||
+      task.description.toLowerCase().includes(searchText);
+
+    const matchesStatus =
+      status === "all" ||
+      (status === "completed" && task.completed) ||
+      (status === "pending" && !task.completed);
+
+    const matchesPriority = priority === "all" || task.priority === priority;
+
+    return matchesSearch && matchesStatus && matchesPriority;
+  });
+}
+
+
 // 4. Draw everything on the page
 function renderTasks() {
   taskList.innerHTML = "";
 
-  tasks.forEach(function (task) {
+  getFilteredTasks().forEach(function (task) {
     const li = document.createElement("li");
     li.classList.add("task-item", "priority-" + task.priority);
 
@@ -155,11 +181,24 @@ function updateSummary() {
   completedCount.textContent = completed;
   pendingCount.textContent = tasks.length - completed;
 
-  emptyMessage.style.display = tasks.length === 0 ? "block" : "none";
+    const visible = getFilteredTasks().length;
+
+  if (tasks.length === 0) {
+    emptyMessage.textContent = "No tasks yet. Add your first one above!";
+    emptyMessage.style.display = "block";
+  } else if (visible === 0) {
+    emptyMessage.textContent = "No tasks match your search or filters.";
+    emptyMessage.style.display = "block";
+  } else {
+    emptyMessage.style.display = "none";
+  }
 }
 
 // 6. Events
 taskForm.addEventListener("submit", addTask);
+searchInput.addEventListener("input", renderTasks);
+statusFilter.addEventListener("change", renderTasks);
+priorityFilter.addEventListener("change", renderTasks);
 
 // Show the correct state on first load
 renderTasks();
