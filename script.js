@@ -20,7 +20,7 @@ let tasks = [];
 let editingId = null; // null = adding a new task, otherwise the id being edited
 const submitBtn = document.getElementById("submit-btn");
 
-// 3. Add a task when the form is submitted
+// 3. Add or edit a task when the form is submitted
 function addTask(e) {
   e.preventDefault();
 
@@ -53,7 +53,12 @@ function addTask(e) {
     });
   }
 
-  function toggleComplete(id) {
+  taskForm.reset();
+  renderTasks();
+}
+
+// Mark a task done / not done
+function toggleComplete(id) {
   const task = tasks.find(function (t) {
     return t.id === id;
   });
@@ -61,6 +66,7 @@ function addTask(e) {
   renderTasks();
 }
 
+// Delete a task
 function deleteTask(id) {
   tasks = tasks.filter(function (t) {
     return t.id !== id;
@@ -73,6 +79,7 @@ function deleteTask(id) {
   renderTasks();
 }
 
+// Load a task into the form for editing
 function startEdit(id) {
   const task = tasks.find(function (t) {
     return t.id === id;
@@ -87,10 +94,7 @@ function startEdit(id) {
   titleInput.focus();
 }
 
-  taskForm.reset();
-  renderTasks();
-}
-
+// Apply search + filters
 function getFilteredTasks() {
   const searchText = searchInput.value.trim().toLowerCase();
   const status = statusFilter.value;
@@ -112,7 +116,6 @@ function getFilteredTasks() {
   });
 }
 
-
 // 4. Draw everything on the page
 function renderTasks() {
   taskList.innerHTML = "";
@@ -120,6 +123,7 @@ function renderTasks() {
   getFilteredTasks().forEach(function (task) {
     const li = document.createElement("li");
     li.classList.add("task-item", "priority-" + task.priority);
+    if (task.completed) li.classList.add("completed");
 
     const title = document.createElement("h3");
     title.textContent = task.title;
@@ -136,8 +140,6 @@ function renderTasks() {
       "Priority: " + task.priority +
       (task.dueDate ? " | Due: " + task.dueDate : "");
     li.appendChild(meta);
-
-        if (task.completed) li.classList.add("completed");
 
     const actions = document.createElement("div");
     actions.classList.add("task-actions");
@@ -164,7 +166,7 @@ function renderTasks() {
     actions.appendChild(editBtn);
     actions.appendChild(deleteBtn);
     li.appendChild(actions);
-    
+
     taskList.appendChild(li);
   });
 
@@ -181,7 +183,7 @@ function updateSummary() {
   completedCount.textContent = completed;
   pendingCount.textContent = tasks.length - completed;
 
-    const visible = getFilteredTasks().length;
+  const visible = getFilteredTasks().length;
 
   if (tasks.length === 0) {
     emptyMessage.textContent = "No tasks yet. Add your first one above!";
